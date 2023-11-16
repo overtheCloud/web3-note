@@ -1,0 +1,281 @@
+===
+1. 合约结构
+pragma solidity ^0.8.3;
+
+contract Contract {
+ 
+}
+
+2. data type
+2.1 primitive data type 
+uint(uint8~uint256)
+int(int8~int256)
+bool
+address
+2.2 refrence data type
+2.2.1 string
+2.2.2 array 
+fixed-size array: uint[1] public arr = [1];
+dynamic array:uint[] public arr = [1,2,3];
+arr.push(1); 尾部添加
+arr.pop(); 尾部删除
+arr.length; 获取长度
+uint i = arr[1]; 获取指定索引位置的值
+delete arr[1]; 删除指定索引位置的值
+2.2.3 mapping
+mapping(address => uint) _map;
+uint i = _map[address]; 获取
+_map[address] = i; 设置
+delete _map[address]; 删除
+2.2.4 structs
+struct _struct{
+  uint i;
+  string name;
+  bool b;
+}
+三种初始化方法
+_struct(1, "name", true);
+_struct(i: 1, name: "name", b: true);
+_struct memory st;
+st.i = 1;
+st.name = "name";
+st.b = true;
+2.2.4 enum
+enum _enum {
+  name1, name2, ...
+}
+
+3. variable
+global variables 内置变量,如 msg.sender
+state variables 合约内的变量
+local variables 方法内的变量
+
+3. function
+3.1 view & pure
+view 只读不写 state variables
+pure 不读不写 state variable
+3.1 function & modifiers & constructors
+modifiers
+modifier _modifier() {}
+function
+function f() public view _modifier {}
+constructors
+constructor() {}
+3.3 multiple named outputs
+function f() public pure _modifier returns(int,bool) {
+  return (1, true);
+}
+function f() public pure _modifier returns(int _x,bool _y) {
+  return (1, true);
+}
+function f() public view _modifier returns(int _x,bool _y) {
+  _x = 1;
+  _y = true;
+}
+
+4. visiblity
+                current_contract    child_contract   other_contract
+private               1                    0                0   
+internal              1                    1                0
+public                1                    1                1
+external              0                    0                1 
+state variables can not be external
+
+5. control flow
+5.1 if/else
+if (true) {
+  
+} else if (true) {
+  
+} else {
+  
+}
+5.2 for & while & do while
+for(uint i = 0; i < 10; i++) {
+    if(true) continue;
+    if(true) break;
+}
+while(true) {}
+do {} while (true)
+
+6. Data Locations
+storage 链上
+memory 执行期间的内存中
+calldata 仅用于 external 方法参数变量，变量不可变
+memory -> memory 创建引用
+storage -> storage 创建引用
+storage -> memory|calldata 创建副本
+
+
+crypto_zombie
+1. Making the Zombie Factory
+1.2 pragma 声明版本
+pragma solidity >=0.5.0 <0.6.0
+1.3
+- 合约结构
+- state variable
+- uint
+1.4 Math Operations
++ - * / % **
+1.5 Structs
+struct Person{
+  uint age;
+  string name;
+}
+1.6 Arrays
+uint[2] fixedArrays;
+1.7 Function Declarations
+function eatHamburgers(string memory _name, uint _amount) public {
+}
+1.8 Working With Structs and Arrays
+1.9 Private / Public Functions
+1.10 More on Functions
+- Return Values
+- Function modifiers : view | pure
+1.11 Keccak256 and Typecasting
+- Keccak256 hash256
+- Typecasting 类型强转
+uint8 i = 1;
+uint256 j = uint(i);
+1.12 Putting It Together
+1.13 Events 
+1.14 Web3.js
+
+2. Zombie Attack Their Victims
+2.2 Mappings And Addresses
+mapping (address => uint) public accountBalance;
+2.3 Msg.sender
+2.4 Requeire
+require(bool);
+2.5 Inheritance
+contract Dog is Animal {}
+2.6 Import
+import "./zombiefactory.sol" // 注意是文件名不是合约名称
+2.7 Storage vs Memory(Data location)
+2.8 Zombie DNA
+2.9 More on Function Visibility
+2.10 What Do Zombies Eat?- interacting with other contracts
+conract NumberInterface {
+  function getNum(addres _myAddress) public view returns(uint);
+}
+2.11 Using an Interface
+NumberInterface numberContract = NumberInterface(_contractAddress);
+2.12 Handling Multiple Return Values
+2.13 Bonus: Kitty Genes
+-- 比较字符串使用hash
+keccak256(abi.encodePacked(sandwich)) == keccak256(abi.encodePacked("BLT"))
+2.14 Wrapping It Up
+
+3. Advanced Solidity Concepts
+3.1 Immutability of Contracts - 合约不可变
+3.2 Ownable Contracts - 初识 OpenZeppeLin
+constructor() -- 构造方法
+modifier 
+3.3 onlyOwner Function Modifier
+3.4 Gas
+通常使用 uint8 替代 uint256 不会节省小费，因为 solidity 使用 256字节存储 uint。但是在 struct 中可以，struct packing 会将多个 uint 合并
+3.5 Time Units
+seconds, minutes, hours, days, weeks and years
+3.6 Zombie Cooldowns -- 计算 cooldownTime
+3.7 Public Functions & Security - 校验 cooldownTime
+3.8 More on Function Modifiers -- 通过 modifier 实现根据 level 使用不同能力
+modifier arguments
+3.9 Zombie Modifiers -- 实现2.8
+3.10 Saving Gas With 'View' Functions -- 查询并返回 zombies 列表
+view functions don't cost gas when called from external
+3.11 Storage is Expensive -- 实现2.10
+memory arrays length is fixed, can't use array.push()
+3.12 For Loops -- 使用 for 实现填充 2.10结果
+Let's recap:
+- We've added a way to update our CryptoKitties contracts
+- We've learned to protect core functions with onlyOwner
+- We've learned about gas and gas optimization
+- We added levels and cooldowns to our zombies
+- We now have functions to update a zombie's name and DNA once the zombie gets above a certain level
+- And finally, we now have a function to return a user's zombie army
+
+4. Zombie Battle System
+4.1 Payable - function can receive eth
+4.2 Withdraws
+address.transfer(1 ether);
+4.3 Zombie Battles
+4.4 Random Numbers 
+区块链内置方法得到的随机数不安全，可以在自己的节点一直调用直到得到期待的结果再打包交易.一个安全的方法是使用 oracles
+uint random = uint(keccak256(abi.encodePacked(now, msg.sender, randNonce))) % 100; -- 得到0~99的随机数
+4.5 Zombie Fightin'
+- You choose one of your zombies, and choose an opponent's zombie to attack.
+- If you're the attacking zombie, you will have a 70% chance of winning. The defending zombie will have a 30% chance of winning.
+- All zombies (attacking and defending) will have a winCount and a lossCount that will increment depending on the outcome of the battle.
+- If the attacking zombie wins, it levels up and spawns a new zombie.
+- If it loses, nothing happens (except its lossCount incrementing).
+- Whether it wins or loses, the attacking zombie's cooldown time will be triggered.
+4.6 Refactoring Common Logic
+4.7 More Refactoring
+4.8 Back to Attack
+4.9 Zombie Wins and Losses
+4.10 Zombie Victory
+4.11 Zombie Loss
+
+5. Beginner to Intermediate Smart Contracts 
+5.1 Tokens on Ethereum
+5.2 ERC721 Standard, Multiple Inheritance
+contract ERC721 {
+  event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
+  event Approval(address indexed _owner, address indexed _approved, uint256 indexed _tokenId);
+
+  function balanceOf(address _owner) external view returns (uint256);
+  function ownerOf(uint256 _tokenId) external view returns (address);
+  function transferFrom(address _from, address _to, uint256 _tokenId) external payable;
+  function approve(address _approved, uint256 _tokenId) external payable;
+}
+5.3 balanceOf & ownerOf
+5.4 Refactoring
+5.5 ERC721: Transfer Logic
+5.6 ERC721: Transfer Cont'd
+5.7 ERC721: Approve
+5.8 ERC721: Approve
+5.9 Preventing Overflow -- uint 向上或向下溢出，使用 SafeMath 替代基础运算符
+5.10 SafeMath Part 2
+5.11 SafeMath Part 3
+5.12 SafeMath Part 4
+5.13 Comments
+// 
+/* 
+*/
+5.14 Wrapping It Up
+- Tokens, the ERC721 standard, and tradable assets/zombies
+- Libraries and how to use them
+- How to prevent overflows and underflows using the SafeMath library
+- Commenting your code and the natspec standard
+
+6. App Front-ends & Web3.js
+6.1 Intro to Web3.js
+6.2 Web3 Providers -- Metamask
+6.3 Talking to Contracts
+var contract_instrance = new web3js.eth.Contract(abi, contract_address);
+6.4 Calling Contract Functions 
+call() 调用 view pure
+send() 调用非 veiw pure
+cryptoZombies.methods.zombies(id).call()
+6.5 Metamask & Accounts
+web3.eth.accounts[0]; -- 当前使用的 account
+6.6 Displaying out Zombie Army
+6.7 Sending Transactions
+6.8 Calling Payable Functions 
+wei
+6.9 Subscribing to Events
+cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
+.on("data", function(event) {
+  let data = event.returnValues;
+}).on("error", console.error);
+cryptoZombies.getPastEvents("NewZombie", { fromBlock: 0, toBlock: "latest" })
+.then(function(events) {
+});
+6.10 Wrapping It Up
+
+7. Truffle
+7.1 init
+- npm install truffle -g -- 安装 truffle
+- truffle init -- 初始化项目，要求所在目录是空的
+- npm install truffle truffle-hdwallet-provider -- 用于 sign transaction
+- truffle compile -- 编译项目
